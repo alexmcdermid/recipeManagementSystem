@@ -1,7 +1,5 @@
 package recipes.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +9,15 @@ import recipes.DTO.RecipeDTO;
 import recipes.model.Recipe;
 import recipes.service.RecipeService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipe")
 public class RecipeController {
 
-    private static final Logger log = LoggerFactory.getLogger(RecipeController.class);
     private final RecipeService recipeService;
 
     @Autowired
@@ -28,31 +27,31 @@ public class RecipeController {
 
     @PostMapping("/new")
     public ResponseEntity<?> addRecipe(@RequestBody Recipe recipe) {
-        if (recipe.getName() == null || recipe.getName().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name cannot be blank");
-        }
-        if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Description cannot be blank");
-        }
-        if (recipe.getIngredients() == null || recipe.getIngredients().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ingredients cannot be empty");
-        }
-        if (recipe.getDirections() == null || recipe.getDirections().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Directions cannot be empty");
-        }
-
+        validateSaveRecipe(recipe);
         Map<String, Integer> response = new HashMap<>();
-        Recipe savedRecipe = recipeService.createRecipe(recipe);
-        log.info(savedRecipe.toString());
+        Recipe savedRecipe = recipeService.saveRecipe(recipe);
         Long id = savedRecipe.getId();
         response.put("id", id.intValue());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
+        Recipe existingRecipe = recipeService.getRecipe(String.valueOf(id)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+        existingRecipe.setName(recipe.getName());
+        existingRecipe.setCategory(recipe.getCategory());
+        existingRecipe.setDescription(recipe.getDescription());
+        existingRecipe.setIngredients(recipe.getIngredients());
+        existingRecipe.setDirections(recipe.getDirections());
+        validateSaveRecipe(existingRecipe);
+        recipeService.saveRecipe(existingRecipe);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getRecipe(@PathVariable String id) {
         Recipe recipe = recipeService.getRecipe(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
-        RecipeDTO recipeDTO = new RecipeDTO(recipe.getName(), recipe.getDescription(), recipe.getIngredients(), recipe.getDirections());
+        RecipeDTO recipeDTO = new RecipeDTO(recipe.getName(), recipe.getCategory(), recipe.getDate(), recipe.getDescription(), recipe.getIngredients(), recipe.getDirections());
         return ResponseEntity.ok(recipeDTO);
     }
 
@@ -61,5 +60,37 @@ public class RecipeController {
         Recipe recipe = recipeService.getRecipe(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
         recipeService.deleteRecipe(recipe.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/search/")
+    public ResponseEntity<?> searchRecipe(@RequestParam(required = false) String category, @RequestParam(required = false) String name) {
+        if ((category != null && name != null) || (category == null && name == null)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request parameters");
+        }
+
+        List<Recipe> recipes = recipeService.searchRecipes(category, name);
+
+        List<RecipeDTO> recipeDTOs = recipes.stream()
+                .map(recipe -> new RecipeDTO(recipe.getName(), recipe.getCategory(), recipe.getDate(), recipe.getDescription(), recipe.getIngredients(), recipe.getDirections())).toList();
+
+        return ResponseEntity.ok(recipeDTOs);
+    }
+
+    private void validateSaveRecipe(Recipe recipe) {
+        if (recipe.getName() == null || recipe.getName().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name cannot be blank");
+        }
+        if (recipe.getCategory() == null || recipe.getCategory().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category cannot be blank");
+        }
+        if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Description cannot be blank");
+        }
+        if (recipe.getIngredients() == null || recipe.getIngredients().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingredients cannot be empty");
+        }
+        if (recipe.getDirections() == null || recipe.getDirections().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Directions cannot be empty");
+        }
     }
 }

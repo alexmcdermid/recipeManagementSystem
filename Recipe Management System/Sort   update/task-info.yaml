@@ -13,6 +13,24 @@ files:
   - name: test/RecipesApplicationTest.java
     visible: false
     learner_created: false
+  - name: src/recipes/DTO/RecipeDTO.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/controller/RecipeController.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/repository/RecipeRepository.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/service/RecipeService.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/model/Recipe.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/projects/180/stages/920/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 06 Jan 2025 19:38:23 UTC"
 record: -1
