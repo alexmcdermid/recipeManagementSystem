@@ -3,13 +3,15 @@ package recipes.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import recipes.DTO.RecipeDTO;
 import recipes.model.Recipe;
+import recipes.model.User;
+import recipes.repository.UserRepository;
 import recipes.service.RecipeService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +21,20 @@ import java.util.Map;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, UserRepository userRepository) {
         this.recipeService = recipeService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> addRecipe(@RequestBody Recipe recipe) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+        recipe.setUserId(currentUser.getId());
+
         validateSaveRecipe(recipe);
         Map<String, Integer> response = new HashMap<>();
         Recipe savedRecipe = recipeService.saveRecipe(recipe);
@@ -38,6 +46,13 @@ public class RecipeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
         Recipe existingRecipe = recipeService.getRecipe(String.valueOf(id)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+
+        if (!existingRecipe.getUserId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this recipe");
+        }
+
         existingRecipe.setName(recipe.getName());
         existingRecipe.setCategory(recipe.getCategory());
         existingRecipe.setDescription(recipe.getDescription());
@@ -58,6 +73,11 @@ public class RecipeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRecipe(@PathVariable String id) {
         Recipe recipe = recipeService.getRecipe(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+        if (!recipe.getUserId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the author of this recipe");
+        }
         recipeService.deleteRecipe(recipe.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

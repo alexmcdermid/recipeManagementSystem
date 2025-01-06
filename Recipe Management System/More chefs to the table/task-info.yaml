@@ -12,6 +12,46 @@ files:
   - name: test/RecipesApplicationTest.java
     visible: false
     learner_created: false
+  - name: src/recipes/DTO/RecipeDTO.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/controller/RecipeController.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/repository/RecipeRepository.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/service/RecipeService.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/model/Recipe.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/controller/ResgisterController.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/model/User.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/repository/UserRepository.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/DTO/RegisterRequest.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/config/SecurityConfig.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/config/RestAuthenticationEntryPoint.java
+    visible: true
+    learner_created: true
+  - name: src/recipes/service/CustomUserDetailsService.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/projects/180/stages/921/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">Hyperskill</a>
+    to continue learning.
+  time: "Mon, 06 Jan 2025 23:10:25 UTC"
 record: -1
