@@ -22,4 +22,8 @@ public class RecipeService {
     public Optional<Recipe> getRecipe(String id) {
         return recipeRepository.findById(Long.parseLong(id));
     }
+
+    public void deleteRecipe(Long id) {
+        recipeRepository.deleteById(id);
+    }
 }

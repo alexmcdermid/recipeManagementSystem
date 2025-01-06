@@ -1,0 +1,43 @@
+2025-01-06 09:53:39.980369-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RECIPE" not found (this database is empty); SQL statement:
+insert into recipe (description,name,id) values (?,?,default) [42104-224]
+2025-01-06 09:54:35.850668-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RECIPE" not found (this database is empty); SQL statement:
+insert into recipe (description,name,id) values (?,?,default) [42104-224]
+2025-01-06 09:56:07.548664-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RECIPE" not found (this database is empty); SQL statement:
+insert into recipe (description,name,id) values (?,?,default) [42104-224]
+2025-01-06 09:58:51.307540-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RECIPE" not found (this database is empty); SQL statement:
+insert into recipe (description,name,id) values (?,?,default) [42104-224]
+2025-01-06 10:02:33.578305-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RECIPE" not found (this database is empty); SQL statement:
+insert into recipe (description,name,id) values (?,?,default) [42104-224]
+2025-01-06 10:11:30.634256-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:11:30.686080-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:11:42.871456-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:21:59.084416-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:21:59.140025-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:22:11.378355-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:27:59.536512-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:27:59.588510-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:28:11.730429-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:30:28.284687-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:30:28.353164-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:30:40.874778-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:34:08.729108-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2025-01-06 10:34:08.813295-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
